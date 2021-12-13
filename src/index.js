@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 
 const { v4: uuidv4, validate } = require('uuid');
-const { user } = require('./__tests__/middlewares/checksTodoExists.spec');
 
 const app = express();
 app.use(express.json());
@@ -26,8 +25,8 @@ function checksExistsUserAccount(request, response, next) {
 
 function checksCreateTodosUserAvailability(request, response, next) {
   const { user } = request;
-  const todosAmount = user.todos.length();
-  const canCreateTodos = user.pro || !user.pro && todosAmount <= 10 
+  const todosAmount = user.todos.length;
+  const canCreateTodos = user.pro || !user.pro && todosAmount < 10 
 
   if(!canCreateTodos) {
     return response.status(403).json({error: 'Number of todos created exceed free plan´s limit!'})
@@ -57,6 +56,7 @@ function checksTodoExists(request, response, next) {
     return response.status(404).json({error: 'Todo does not exist for this user!'});
   }
   request.todo = todo;
+  request.user = user;
 
   return next();
 }
