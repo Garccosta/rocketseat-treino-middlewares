@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 const {
   users,
   checksExistsUserAccount
-} = require('../../');
+} = require('../../index');
 
 let response;
 let request;
